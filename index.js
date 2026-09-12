@@ -69,7 +69,7 @@ const updateStock = (product, id, newStock)=> {
 }
 
 //bagian 3
-const productNested = [
+const productsNested = [
   {
     id: 1,
     title: "Laptop",
@@ -81,12 +81,12 @@ const productNested = [
     dimensions: {
       width: 30,
       height: 2,
-      depth: 20
+      depth: 20,
     },
     reviews: [
       { user: "A", rating: 5, comment: "Good product" },
-      { user: "B", rating: 4, comment: "Worth it" }
-    ]
+      { user: "B", rating: 4, comment: "Worth it" },
+    ],
   },
   {
     id: 2,
@@ -99,14 +99,88 @@ const productNested = [
     dimensions: {
       width: 7,
       height: 0.8,
-      depth: 15
+      depth: 15,
     },
     reviews: [
       { user: "C", rating: 4, comment: "Nice camera" },
       { user: "D", rating: 5, comment: "Fast" },
-      { user: "E", rating: 3, comment: "Battery so-so" }
-    ]
-  }
+      { user: "E", rating: 3, comment: "Battery so-so" },
+    ],
+  },
+  {
+    id: 3,
+    title: "Wireless Headphones",
+    price: 150,
+    rating: 4.8,
+    stock: 25,
+    category: "audio",
+    tags: ["bluetooth", "electronics", "music"],
+    dimensions: {
+      width: 18,
+      height: 20,
+      depth: 8,
+    },
+    reviews: [
+      { user: "F", rating: 5, comment: "Great sound quality" },
+      { user: "G", rating: 5, comment: "Noise cancellation is amazing" },
+    ],
+  },
+  {
+    id: 4,
+    title: "Ergonomic Chair",
+    price: 250,
+    rating: 4.0,
+    stock: 5,
+    category: "furniture",
+    tags: ["office", "furniture", "comfort"],
+    dimensions: {
+      width: 65,
+      height: 120,
+      depth: 65,
+    },
+    reviews: [
+      { user: "H", rating: 4, comment: "Helps with back pain" },
+      { user: "I", rating: 3, comment: "Hard to assemble" },
+      { user: "J", rating: 5, comment: "Very comfortable" },
+    ],
+  },
+  {
+    id: 5,
+    title: "Smart Watch",
+    price: 200,
+    rating: 3.9,
+    stock: 0,
+    category: "wearables",
+    tags: ["mobile", "fitness", "electronics"],
+    dimensions: {
+      width: 4,
+      height: 1,
+      depth: 24,
+    },
+    reviews: [
+      { user: "K", rating: 3, comment: "Step counter is inaccurate" },
+      { user: "L", rating: 4, comment: "Sleek design" },
+    ],
+  },
+  {
+    id: 6,
+    title: "Mechanical Keyboard",
+    price: 110,
+    rating: 4.7,
+    stock: 18,
+    category: "laptops",
+    tags: ["computer", "accessories", "gaming"],
+    dimensions: {
+      width: 44,
+      height: 4,
+      depth: 13,
+    },
+    reviews: [
+      { user: "M", rating: 5, comment: "Tactile feel is great" },
+      { user: "N", rating: 4, comment: "A bit loud but nice" },
+      { user: "O", rating: 5, comment: "Best keyboard I ever owned" },
+    ],
+  },
 ];
 
 //Latihan 3.1
@@ -175,7 +249,7 @@ const tags = [
 const all = tags.flatMap((p) => p)
 
 //Latihan 4.2
-const allComment = productNested.flatMap((p) => p.reviews).map((r)=> r.comment)
+const allComment = productsNested.flatMap((p) => p.reviews).map((r)=> r.comment)
 
 //Bagian 5
 //Latihan 5.1
@@ -231,7 +305,7 @@ function binarySearch(arr, target) {
 }; 
 
 //Latihan 7.2
-const sortingData = [...productNested].sort((a,z) => a.price - z.price);
+const sortingData = [...productsNested].sort((a,z) => a.price - z.price);
 const binarySearchById = (sortedProduct, targetPrice)=> {
     let left = 0;
     let right = sortedProduct.length - 1;
@@ -267,11 +341,115 @@ const sortProduct = (product, sortBy)=> {
         return [...product].sort((a,z) => z.price - a.price);
     } else if (sortBy == 'rating'){
         const rating = product.flatMap((p) => p.reviews);
-        return [...rating].sort((a,z) => a.rating - z.rating)
+        return [...rating].sort((a,z) => a.rating - z.rating);
     } else if (sortBy == 'title'){
-        return [...product].sort((a,z) => z.title.localeCompare(a.title))
+        return [...product].sort((a,z) => z.title.localeCompare(a.title));
     }
-}; console.log(sortProduct(productNested, 'title'))
+};
+
+//Bagian 9
+//Lat 9.1
+function groupByCategory(products) {
+  return products.reduce((groups, product) => {
+    const key = product.category;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(product);
+    return groups;
+  }, {});
+}; //console.log(groupByCategory(productsNested))
+
+const printAllByCategory = (product)=> {
+    const data = groupByCategory(productsNested);
+
+    for (const [category, item] of Object.entries(data)){
+        return `Category: ${category}, jumlah: ${item.length}`
+    }
+}; //console.log(printAllByCategory(productsNested))
+
+//Bagian 10
+//Lat 10.1
+const words = ["laptop", "phone", "laptop", "tablet", "phone", "laptop"];
+function countFrequency(array) {
+  return array.reduce((counts, item) => {
+    counts[item] = (counts[item] || 0) + 1;
+    return counts;
+  }, {});
+}; //console.log(countFrequency(words))
+
+//Lat 10.2
+const countFrequencyAll = (product)=> {
+    const dataCategory = product.flatMap(p => p.category);
+    const dataTags = product.flatMap(p => p.tags);
+    const dataRating = ambilAllReview(product);
+    return{
+        hasilCategory: countFrequency(dataCategory),
+        hasilTags: countFrequency(dataTags),
+        hasilRating: countFrequency(dataRating),
+    }
+    
+
+};
+
+//Bag 11
+//Penjelasan
+const categories = [...new Set(productsNested.map(p => p.category))]; //console.log(categories)
+
+//Lat 11.1
+const practiceSet = (product)=> {
+    const dataCategory = [...new Set(product.map(p => p.category))];
+    const dataTags = [...new Set(product.flatMap((p) => p.tags))];
+
+    return {
+        hasilCategory: dataCategory,
+        hasilTags: dataTags,
+    }
+}; //console.log(practiceSet(productsNested))
+
+//Bag 12
+//Lat 12.1
+const productMap = new Map();
+for (const product of products) {
+  productMap.set(product.id, product);
+}
+
+//Lat 12.2
+const buildProductLookup = (product) => {
+    const productMap = new Map();
+    for (const item of product){
+        productMap.set(item.id, item)
+    }; return productMap;
+}; //console.log(buildProductLookup(productsNested))
+
+//Bag 13
+//Lat 13.1
+class Stack {
+  constructor() {
+    this.items = [];
+  }
+  push(item) {
+    this.items.push(item);
+  }
+  pop() {
+    return this.items.pop();
+  }
+  peek() {
+    return this.items[this.items.length - 1];
+  }
+  isEmpty() {
+    return this.items.length === 0;
+  }
+}
+
+//Lat 13.2
+const browser = new Stack();
+browser.push('Cara menjadi kaya dalam 1 menit');
+browser.push('Cara mendapatkan khodam babi ngepet');
+browser.push('Cara menjadi tuyul secara instan');
+console.log(browser.peek())
+
+
+
+
 
 
 
