@@ -176,3 +176,103 @@ const all = tags.flatMap((p) => p)
 
 //Latihan 4.2
 const allComment = productNested.flatMap((p) => p.reviews).map((r)=> r.comment)
+
+//Bagian 5
+//Latihan 5.1
+const meanPriceByCategory = (product)=> {
+    return product.filter((p) => p.category == 'laptops').map(p => p.price);
+};
+
+//Latihan 5.2
+const getStatistics = (product)=> {
+    const totalProduct = `Total product didalam arrat terdapat ${product.length}`;
+    const averagePrice = product.reduce((sum, p) => sum + p.price, 0); 
+    const highestPrice = Math.max(...product.map(p => p.price)); 
+    const lowestPrice = Math.min(...product.map(p => p.price));
+    const totalStock = product.reduce((sum, p) => sum + p.stock, 0);
+    const averageRating = ()=> {
+        return product.map((p) => {
+            const total = p.reviews.reduce((sum, ripiw) => sum + ripiw.rating, 0);
+            const average = total / p.reviews.length;
+            return `Rata rata nya ialah ${average}`
+        })
+    };
+}; 
+
+//Bagian 6
+//Latihan 6.1
+const angka = [1,2,3,4,5,6,7,8,9,0]
+function linearSearch(array, target) {
+  for (let i = 0; i < array.length; i++) {
+    if (i === target) return array[i];
+  }
+  return -1;
+};
+
+//Latihan 6.2
+const linearSearchById = (arr, target)=> {
+    for (let i = 0; i < arr.length; i++){
+        return arr.find(arr => arr.id == target)
+    } return"BELAJAR MAKANYA!";
+};
+
+//Bagian 7
+//Latihan 7.1
+function binarySearch(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    if (arr[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}; 
+
+//Latihan 7.2
+const sortingData = [...productNested].sort((a,z) => a.price - z.price);
+const binarySearchById = (sortedProduct, targetPrice)=> {
+    let left = 0;
+    let right = sortedProduct.length - 1;
+    while (left <= right){
+        const mid = Math.floor((left + right) / 2);
+        const nowValue = sortedProduct[mid].price;
+        if (nowValue === targetPrice) return sortedProduct[mid];
+        if (nowValue < targetPrice) return left = mid + 1;
+        else right = mid - 1;
+    } return "data tidak ditemukan"
+};
+
+//Bagian 8
+//Latihan 8.1
+function bubbleSort(numbers) {
+  const arr = [...numbers];
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+  }
+  return arr;
+};
+
+//Latihan 8.2
+
+const sortProduct = (product, sortBy)=> {
+    if (sortBy == 'price-asc'){
+        return [...product].sort((a,z) => a.price - z.price);
+    } else if (sortBy == 'price-dsc'){
+        return [...product].sort((a,z) => z.price - a.price);
+    } else if (sortBy == 'rating'){
+        const rating = product.flatMap((p) => p.reviews);
+        return [...rating].sort((a,z) => a.rating - z.rating)
+    } else if (sortBy == 'title'){
+        return [...product].sort((a,z) => z.title.localeCompare(a.title))
+    }
+}; console.log(sortProduct(productNested, 'title'))
+
+
+
+
