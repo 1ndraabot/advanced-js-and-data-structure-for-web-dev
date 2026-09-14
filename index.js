@@ -447,6 +447,133 @@ browser.push('Cara mendapatkan khodam babi ngepet');
 browser.push('Cara menjadi tuyul secara instan');
 console.log(browser.peek())
 
+//Bagian 14
+//Lat 14.1
+class Queue {
+  constructor() {
+    this.items = [];
+  }
+  enqueue(item) {
+    this.items.push(item);
+  }
+  dequeue() {
+    return this.items.shift();
+  }
+  peek() {
+    return this.items[0];
+  }
+};
+
+//Bagian 15
+const categoriest = [
+  {
+    name: "Electronics",
+    children: [
+      { name: "Laptop", children: [] },
+      { name: "Phone", children: [] },
+    ],
+  },
+]; console.log(categoriest.map(p => p.children))
+
+//Lat 15.1
+function printCategories(categories, depth = 0) {
+  for (const category of categories) {
+    console.log(" ".repeat(depth) + category.name);
+    if (category.children.length > 0) {
+      printCategories(category.children, depth + 1);
+    }
+  }
+}; //printCategories(categoriest)
+
+//Bagian 16
+//Latihan 16.1
+const linearSearchById2 = (array, targetId) => {
+    let steps = 0;
+    for (let i = 0; i < array.length; i++) {
+        steps++;
+        if (array[i].id === targetId) {
+            return { foundIndex: i, steps };
+        }
+    }
+    return { foundIndex: -1, steps };
+};
+
+const binarySearchByPrice2 = (sortedProduct, targetPrice) => {
+    let left = 0;
+    let right = sortedProduct.length - 1;
+    let steps = 0;
+
+    while (left <= right) {
+        steps++;
+        const mid = Math.floor((left + right) / 2);
+        
+        if (sortedProduct[mid].price === targetPrice) {
+            return { foundIndex: mid, steps };
+        }
+        if (sortedProduct[mid].price < targetPrice) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return { foundIndex: -1, steps };
+};
+
+const categoriesDummy = ['Elektronik', 'Pakaian', 'Makanan', 'Buku', 'Kecantikan'];
+const productsDummy = Array.from({ length: 10000 }, (_, index) => ({
+    id: index + 1,
+    name: `Produk ${index + 1}`,
+    price: (index + 1) * 100 // Harga terurut: 100, 200, 300, ...
+}));
+
+const targetProduct = productsDummy[9999]; // Elemen ke-10.000 (id: 10000, price: 1000000)
+
+const resultLinear = linearSearchById2(productsDummy, targetProduct.id);
+const resultBinary = binarySearchByPrice2(productsDummy, targetProduct.price);
+
+// console.log(`Linear Search : Menemukan data di indeks ${resultLinear.foundIndex} dalam ${resultLinear.steps} langkah.`);
+// console.log(`Binary Search : Menemukan data di indeks ${resultBinary.foundIndex} dalam ${resultBinary.steps} langkah.`);
+
+//Latihan 16.2
+// console.time("Nested Loop Execution Time");
+let nestedOperations = 0;
+const pairsNested = [];
+
+for (let i = 0; i < products.length; i++) {
+    for (let j = i + 1; j < products.length; j++) {
+        nestedOperations++; // Menghitung berapa kali iterasi pembandingan terjadi
+        if (products[i].category === products[j].category) {
+            pairsNested.push([products[i], products[j]]);
+        }
+    }
+}
+// console.timeEnd("Nested Loop Execution Time");
+// console.log(`Nested Loop (O(n²)) Operations: ${nestedOperations.toLocaleString()} perbandingan\n`);
+
+// console.time("Map Grouping Execution Time");
+let mapOperations = 0;
+const categoryMap = new Map();
+
+for (let i = 0; i < products.length; i++) {
+    mapOperations++;
+    const cat = products[i].category;
+    if (!categoryMap.has(cat)) {
+        categoryMap.set(cat, []);
+    }
+    categoryMap.get(cat).push(products[i]);
+}
+
+const pairsMap = [];
+categoryMap.forEach((group) => {
+    for (let i = 0; i < group.length; i++) {
+        for (let j = i + 1; j < group.length; j++) {
+            pairsMap.push([group[i], group[j]]);
+        }
+    }
+});
+// console.timeEnd("Map Grouping Execution Time");
+// console.log(`Map Grouping (O(n)) Operations: ${mapOperations.toLocaleString()} operasi grouping`);
+
 
 
 
